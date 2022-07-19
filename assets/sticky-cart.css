@@ -1,0 +1,63 @@
+/* Sticky Cart */
+#sticky-cart {
+  position: fixed;
+  bottom: 20px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  background: var(--background);
+  z-index: 11;
+  justify-content: space-between;
+  height: 80px;
+  left: 50%;
+  transform: translate(-50%,0%);
+  box-shadow: 0 2px 4px 0 rgba(34, 34, 34, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+#sticky-cart.show {
+  opacity: 1;
+}
+#sticky-cart .product-info {
+  width: 600px;
+  padding: 12px 20px;
+  margin: 0;
+}
+#sticky-cart .product-info h4 {
+  margin-bottom: 8px;
+}
+#sticky-cart .product-info p {
+  margin-bottom: 0;
+}
+#sticky-cart .AddtoCart {
+  height: 80px;
+  margin-bottom: 0;
+  width: 220px !important;
+  border-radius: 0;
+}
+#sticky-cart div.current-option {
+  width: 190px;
+  text-align: center;
+  align-self: center;
+  border-left: 2px solid var(--dotted-color);
+}
+#sticky-cart p.option-label {
+  margin: 0;
+}
+#sticky-cart p.option-selected {
+  font-weight: bolder;
+  margin: 0;
+}
+#sticky-cart .note {
+  position: absolute;
+  right: 0;
+  top: -80px;
+  width: auto;
+}
+.padding-sticky {
+  padding-bottom: 100px !important;
+}
