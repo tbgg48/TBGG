@@ -1,0 +1,56 @@
+{% comment %}
+snippets/onboard-article.liquid
+{% endcomment %}
+
+{%- liquid
+
+  assign show_divider = false
+  if section.settings.show_date and section.settings.show_author
+    assign show_divider = true
+  endif
+
+-%}
+<li class="article-index {% if posts_per_row == 2 %}span-6{% elsif posts_per_row == 3 %}span-4{% else %}span-12 grid__wrapper grid__wrapper-nest{% endif %} sm-span-12 auto">
+  <div class="onboard article-image {% if posts_per_row == 1 %}span-5{% else %}span-12{% endif %} sm-span-12 auto">
+      <a href="{{ routes.root_url }}">
+        {{ 'collection-1' | placeholder_svg_tag }}
+      </a>
+  </div>
+
+  {% capture byline %}
+    <p class="posted">{% if section.settings.show_date %}12/15/20{% endif %}{% if show_divider %}
+    &ndash; {% endif %}{% if section.settings.show_author %}Author Name{% endif %}</p>
+  {% endcapture %}
+
+  <div class="rte excerpt {% if posts_per_row == 1 %}span-7{% else %}dspan-12{% endif %} sm-span-12 auto">
+    {% if section.settings.show_above %}
+      {% if section.settings.show_date or section.settings.show_author %}
+        {{ byline }}
+      {% endif %}
+    {% endif %}
+    <h3 class="post-title">
+      <a href="{{ routes.root_url }}">Article Title</a>
+    </h3>
+    {% unless section.settings.show_above %}
+      {% if section.settings.show_date or section.settings.show_author %}
+        {{ byline }}
+      {% endif %}
+    {% endunless %}
+    <div class="article-headline">
+      <p class="rte">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+      <a href="{{ routes.root_url }}">
+        <span class="vib-center">{{ 'blogs.article.read_more' | t }}</span>
+        {% render 'snip-icons',
+           wrapper: '.article-headline',
+           type: 'vantage-theme',
+           icon: 'arrow-right',
+           classes: 'right-arrow article-headline--icon',
+           size: '7px',
+           fill: 'var(--text-color)',
+           hover: 'var(--text-color)' %}
+      </a>
+    </div>
+  </div>
+</li>

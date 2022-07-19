@@ -1,0 +1,69 @@
+{% comment %}
+snippets/product-buttons.liquid
+
+useage:
+
+{%
+  render 'product-buttons',
+  product: product,
+  current_variant: current_variant,
+  call_to_action: call_to_action,
+  id: product_form_id,
+  product_form_config: product_form_config
+%}
+
+{% endcomment %}
+{%
+  form 'product', product, data-productid: product.id,
+  id: product_form_id,
+  class: "product_form",
+  data-product-form: product_form_config,
+  data-product-id: product.id
+%}
+<div class="product-add clearfix">
+
+  <!-- hidden fields -->
+  <input class="formQty" type="hidden" name="quantity" value="1" />
+  <input class="formVariantId" name="" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
+
+  <!-- success message -->
+  <div
+    class="note note-success mt3 js-added-msg"
+    style="display: none">
+    <b>{{ 'products.product.added' | t }}</b>&nbsp;&nbsp;&nbsp;
+    <a
+      class="underline"
+      href="{{ routes.cart_url }}">
+      {{ 'products.product.view_cart' | t }}
+    </a>
+    {{ 'products.product.or' | t }}
+    <a
+      class="underline"
+      href="{{ routes.all_products_collection_url }}">
+    {{ 'products.product.continue' | t }}
+    </a>.
+  </div><!-- /.note.note-success -->
+
+  <!-- error message -->
+  <div
+    class="note note-error js-error-msg"
+    style="display: none">
+    <b>{{ 'cart.general.cart_error' | t }}</b>&nbsp;&nbsp;&nbsp;{{ 'cart.general.update_qty_error' | t }}
+  </div><!-- /.note.note-error -->
+
+  <!-- submit button -->
+  <input
+    type="submit"
+    name="button"
+    class="add clearfix mb10 AddtoCart js-ajax-submit {% if settings.show_payment_button and product.selling_plan_groups.size == 0 %} secondary-button{% endif %}"
+    value="{{ call_to_action }}"
+    {% unless current_variant.available %}
+    disabled
+    {% endunless %}/>
+
+  <!-- payment -->
+  {% if settings.show_payment_button %}
+    {{ form | payment_button }}
+  {% endif %}
+</div><!-- /.product-add.clearfix -->
+{% endform %}

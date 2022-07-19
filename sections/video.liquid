@@ -1,0 +1,127 @@
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+-%}
+
+<div class="global__section {{ section_padding }}"><section class="homepage-featured-video-{{ section.id }} {% if settings.animation != 'none' %} animate {{ settings.animation }}{% endif %}" data-section-id="{{ section.id }}" data-section-type="featured-video-section">
+
+  {% if section.settings.heading != blank %}
+    <div class="row">
+      <h2 class="section-title desktop-12 tablet-6 mobile-3">{{ section.settings.heading | escape }}</h2>
+    </div>
+  {% endif %}
+
+  {% if section.settings.display_wide %}
+  {% else %}
+  <div class="row">
+    <div class="desktop-12 tablet-6 mobile-3">
+      {% endif %}
+
+      <div class="videoWrapper">
+        {% if section.settings.video_url == blank %}
+          <iframe src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720" title="{{ section.settings.description | escape }}" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+        {% else %}
+          {% if section.settings.video_url.type == "youtube" %}
+            <iframe src="//www.youtube.com/embed/{{ section.settings.video_url.id }}?rel=0&showinfo=0&vq=720" title="{{ section.settings.description | escape }}" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+          {% if section.settings.video_url.type == "vimeo" %}
+            <iframe src="//player.vimeo.com/video/{{ section.settings.video_url.id }}?byline=0&portrait=0&badge=0" title="{{ section.settings.description | escape }}" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      {% if section.settings.display_wide %}
+      {% else %}
+    </div>
+  </div>
+  {% endif %}
+
+</section></div>
+
+{% schema %}
+{
+  "name": "Video",
+  "settings":
+  [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Video"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_wide",
+      "label": "Full width"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "YouTube or Vimeo link",
+      "accept":
+      [
+        "youtube",
+        "vimeo"
+      ],
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "default": "Describe the video for customers using screen readers",
+      "label": "Video alt text"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "presets":
+  [
+    {
+      "name": "Video"
+    }
+  ],
+  "templates":
+  [
+    "404",
+    "article",
+    "blog",
+    "cart",
+    "collection",
+    "list-collections",
+    "index",
+    "page",
+    "product",
+    "search"
+  ]
+}
+{% endschema %}

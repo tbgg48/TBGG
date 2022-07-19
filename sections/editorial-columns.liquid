@@ -1,0 +1,209 @@
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+-%}
+
+<div class="global__section {{ section_padding }}">
+  <section class="global__section-{{ section.id }} feat-images {% if settings.animation != 'none' %} animate {{ settings.animation }}{% endif %}" id="text-promo-{{ section.id }}" data-section-id="{{ section.id }}">
+
+    <div class="row grid__wrapper">
+      {% if section.settings.title != blank %}
+        <h2 class="section-title span-12 auto">
+          {{ section.settings.title | escape }}
+        </h2>
+
+      {% endif %}
+      {%- liquid
+
+        case section.blocks.size
+          when 1
+            assign column_width = 'span-8 push-2'
+          when 2
+            assign column_width = 'span-6'
+          when 3
+            assign column_width = 'span-4'
+        endcase
+
+      -%}
+
+      {% for block in section.blocks %}
+        <div class="editorial__section-block {{ column_width }} auto sm-span-12 text-promo-{{ block.id }}" {{ block.shopify_attributes }}>
+          {% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}
+            {% if block.settings.image != blank %}
+              {% render 'basic-responsive-image', type: block.settings.image, data_widths: '[180, 360, 540, 720, 900]' %}
+              <noscript>
+                <img src="{{ block.settings.image | img_url: '800x' }}" alt="{{ block.settings.image.alt }}" />
+              </noscript>
+            {% else %}
+              <div class="onboard">
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            {% endif %}
+          {% if block.settings.link != blank %}</a>{% endif %}
+            <div class="editorial__content">
+              {% if block.settings.title_text != blank %}
+                <h3>{{ block.settings.title_text }}</h3>
+              {% endif %}
+              {% if block.settings.text != blank %}
+                <div class="rte">
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+              {% if block.settings.button_text != blank and block.settings.link != blank %}
+              <a class="button mt10" href="{{ block.settings.link }}">
+                {{ block.settings.button_text }}
+              </a>
+              {% endif %}
+            </div>
+
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if section.blocks.size == 0 %}
+      {% render 'no-blocks' %}
+    {% endif %}
+
+  </section>
+  <div class="clear"></div>
+
+  <style>
+    #text-promo-{{ section.id }} .editorial__section-block  {
+      text-align: {{ section.settings.align_text }};
+    }
+  </style>
+</div>
+
+{% schema %}
+{
+  "name": "Editorial columns",
+  "max_blocks": 3,
+  "settings":
+  [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Editorial columns"
+    },
+    {
+      "type": "select",
+      "id": "align_text",
+      "label": "Text alignment",
+      "default": "left",
+      "options":
+      [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centered"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "blocks":
+  [
+    {
+      "type": "text_block",
+      "name": "Column",
+      "settings":
+      [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "title_text",
+          "label": "Heading",
+          "default": "Text column title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Pair an image with columns of text and a call to action button to add an editorial style content section</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button",
+          "default": "Button"
+        }
+      ]
+    }
+  ],
+  "presets":
+  [
+    {
+      "name": "Editorial columns",
+      "blocks":
+      [
+        {
+          "type": "text_block"
+        },
+        {
+          "type": "text_block"
+        },
+        {
+          "type": "text_block"
+        }
+      ]
+    }
+  ],
+  "templates":
+  [
+    "404",
+    "article",
+    "blog",
+    "cart",
+    "collection",
+    "list-collections",
+    "index",
+    "page",
+    "product",
+    "search"
+  ]
+}
+{% endschema %}

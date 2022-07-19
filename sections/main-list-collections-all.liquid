@@ -1,0 +1,52 @@
+<div class="collection-list-template main__section" data-section-id="{{ section.id }}" data-section-type="collection-list-section">
+  <div class="row">
+    <div id="main-list-collection-all" class="main-list-collection-all">
+      {%- liquid
+
+        case section.settings.collections_per_row
+          when 4
+            assign col_per_row = 'span-3 sm-span-6 auto'
+          when 3
+            assign col_per_row = 'span-4 sm-span-6 auto'
+          when 2
+            assign col_per_row = 'span-6 sm-span-6 auto'
+        endcase
+
+      -%}
+
+      {% paginate collections by 48 %}
+
+      {% if collections.size > 0 %}
+        <div class="product-loop grid__wrapper">
+          {% for collection in collections %}
+            {% render 'collection-grid-item', collection: collection, col_per_row: col_per_row %}
+          {% endfor %}
+        </div><!-- /.product-loop -->
+      {% else %}
+        <p>{{ 'collections.general.no_matches' | t }}</p>
+      {% endif %}
+
+      <div class="clear"></div>
+      {% render 'pagination', paginate: paginate %}
+      {% endpaginate %}
+    </div><!-- /#collection-page-all -->
+  </div><!-- /.row -->
+</div><!-- /.collection-list-template -->
+
+{% schema %}
+{
+  "name": "All collections",
+  "settings":
+  [
+    {
+      "type": "range",
+      "id": "collections_per_row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Collections per row",
+      "default": 3
+    }
+  ]
+}
+{% endschema %}
